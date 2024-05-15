@@ -1,0 +1,123 @@
+=== Robot_3 ===
+
+//This robot corresponds to 2 (Low status) in the behavior matrix
+
+~ RobotRatings += "3"
+
+<center>-------------Robot \#3-------------</center>
+
+The robot walks into the room, its shoulders forward in a slight slouch, and walks over to the side of the table. With its head tilted slightly forward it looks over at you cautiously.
+
+-> Command_Robot_3
+
+=== Command_Robot_3 ===
+
++ {Command_Robot_3.Draw_circle < 3} - Ask the robot to draw a circle on the whiteboard 
+->Command_Robot_3.Draw_circle
+
++ {Command_Robot_3.Pick_up_box < 3} - Ask the robot to pick up a box from the floor and place it on the table
+->Command_Robot_3.Pick_up_box
+
++ {Command_Robot_3.Walk_around_table < 3} - Ask the robot to walk around the table
+->Command_Robot_3.Walk_around_table
+
++ {Command_Robot_3.Shake_hand < 3} - Ask the robot to shake your hand 
+->Command_Robot_3.Shake_hand
+
+* {Draw_circle && Pick_up_box && Walk_around_table && Shake_hand} - Ask robot to leave the room 
+->Command_Robot_3.Robot_3_leaves
+
+// -------------------------------------------------
+= Draw_circle
+
+The robot paces over to the whiteboard and picks up a pen. It hastily draws a small circle on the board and fidgets with the pen a bit before placing it back on the board.
+
+
+
+-> Command_Robot_3
+
+// -------------------------------------------------
+= Pick_up_box
+
+The robot immediately walks over to one of the boxes and leans over to pick it up. With its elbows up against the side of its body, the robot raises the box up off of the floor and places it on the table.
+
+
+-> Command_Robot_3
+
+// -------------------------------------------------
+= Walk_around_table 
+
+The robot moves briskly around the table, in a wide arch around you, and stops after reaching its starting position.
+
+
+-> Command_Robot_3
+
+// -------------------------------------------------
+= Shake_hand 
+
+Approaching you, the robot wipes its hand on its leg and extends it to greet you. Its eyes briefly meeting yours, it shakes your hand and gives it a small squeeze. 
+
+
+-> Command_Robot_3
+
+// -------------------------------------------------
+
+= Robot_3_leaves
+
+The robot nods and scratches the side of its cheek, and quickly makes its way out through the exit. 
+
+
+
+->Rate_Robot_3
+
+=== Rate_Robot_3 ===
+
+~ Loop_count = 1
+
+When the robot has left, you bring up your clipboard to fill in your evaluation of robot \#3. The evaluation reads as follows:
+
+On a scale of 1 to 5, where 1 is "Not accurate" and 5 is "Very accurate", how well do the following words describe the robot you just interacted with?
+
+-> Top_of_adjective_loop
+
+- (Top_of_adjective_loop)
+
+{ LIST_COUNT(Robot_personality) < Loop_count:
+    -> Next_robot
+- else:
+    -> Rating_part
+}
+
+
+- (Rating_part)
+
+{Robot_personality(Loop_count)}
+~ Loop_count +=1
+
+
++ [1]
+~ RobotRatings+="1"
+-> Top_of_adjective_loop
++ [2]  
+~ RobotRatings+="2"
+-> Top_of_adjective_loop
++ [3]  
+~ RobotRatings+="3"
+-> Top_of_adjective_loop
++ [4]  
+~ RobotRatings+="4"
+-> Top_of_adjective_loop
++ [5]  
+~ RobotRatings+="5"
+-> Top_of_adjective_loop
+
+
+
+- (Next_robot)
+
+
++ {LIST_COUNT(Robot_list) > 0} - Ask to send the next robot in -> Start_scene.Random_robot
++ {LIST_COUNT(Robot_list) == 0} [Leave the room and end the test] -> End_scene
+
+
+->END

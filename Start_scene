@@ -1,0 +1,41 @@
+=== Start_scene ===
+//Explain the premise
+Welcome to the test site! You, a robot quality assurance specialist, have been sent here to evaluate four service robot prototypes. The robots all look the same; humanoid, genderless, of regular height, and with fully expressive faces. Each robot behaves differently, and your job will be to interact with each robot, observe their behavior, and fill out a questionnaire about how they behave after each encounter. You can command the robots to do four different actions, and you must have them perform all four actions at least once before moving on to the next robot.
+Once you have met with and evaluated each robot, you will be asked to fill out a form about the experience as a whole.
+
+
+Are you ready to get started?
+
+
+
++ [Yes, let's do it!] ->Test_starts
+
+
+- (Test_starts)
+You enter the test room, a clipboard and pen in your hands. The room is mostly empty apart from a small table with a number of boxes next to it on the floor, and a whiteboard. The boxes are the size of shoe boxes and appear empty. The whiteboard has two black markers stuck to it with magnets. You walk over to the table and await the first robot.
+
+* - Ask the robot to enter the room
+
+-> Start_scene.Random_robot
+
+= Random_robot
+
+//First, check if there are any more robots to encounter. If there are, select a new one. If not, go to the end.
+{LIST_COUNT(Robot_list) > 0:
+ ~ Current_robot = pop_random(Robot_list) 
+- else:->End_scene
+}
+
+
+
+//Check which robot to encounter and go to that encounter
+{Current_robot:
+- Robot_var_1: ->Robot_1
+- Robot_var_2: ->Robot_2
+- Robot_var_3: ->Robot_3
+- Robot_var_4: ->Robot_4
+- else: ->End_scene
+}
+
+
+-> END

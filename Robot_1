@@ -1,0 +1,133 @@
+=== Robot_1 ===
+
+//This robot corresponds to 5 (High status) in the behavior matrix
+
+// At the beginning of each robot encounter, adds the number of the robot (1-4) to the robot ratings variable, to signify which robot the subsequent rating numbers are associated with. This will be helpful as the encounters are in a random order and will be easily parsed as all robots are rated the same amount of times, and the rating variable will end up looking something like: 2[nine rating numbers]1[nine rating numbers]4[nine rating numbers]3[nine rating numbers]
+
+~ RobotRatings += "1"
+
+
+
+<center>-------------Robot \#1-------------</center>
+
+The robot slowly enters the room through the doorway, making eye contact with you as it enters. With long deliberate strides it makes its way over to the table, quite close to where you're standing. You take a step back to be at a comfortable distance and observe the robot. It rolls its shoulders back and stands up straight awaiting a command.
+
+-> Command_Robot_1
+
+=== Command_Robot_1 ===
+
+//Command the robot to do either of the four tasks. Each task can be done 3 times and is then made unavailable. Once all tasks have been done at least once, the option to end the interaction becomes available
++ {Command_Robot_1.Draw_circle < 3} - Ask the robot to draw a circle on the whiteboard 
+->Command_Robot_1.Draw_circle
+
++ {Command_Robot_1.Pick_up_box < 3} - Ask the robot to pick up a box from the floor and place it on the table
+->Command_Robot_1.Pick_up_box
+
++ {Command_Robot_1.Walk_around_table < 3} - Ask the robot to walk around the table
+->Command_Robot_1.Walk_around_table
+
++ {Command_Robot_1.Shake_hand < 3} - Ask the robot to shake your hand 
+->Command_Robot_1.Shake_hand
+
+* {Draw_circle && Pick_up_box && Walk_around_table && Shake_hand} - Ask robot to leave the room 
+->Command_Robot_1.Robot_1_leaves
+
+// -------------------------------------------------
+= Draw_circle
+
+The robot calmly approaches the whiteboard and picks up one of the pens. It draws a large circle on the whiteboard, and places the pen back on the board before returning its gaze to you. 
+
+
+
+-> Command_Robot_1
+
+// -------------------------------------------------
+= Pick_up_box
+
+The robot pauses for a second. It then walks over to one of the boxes, and in one continuous movement bends down, picks the box up with both hands, and places it gently on the table. 
+
+
+-> Command_Robot_1
+
+// -------------------------------------------------
+= Walk_around_table 
+
+The robot slowly turns its head to survey the table. It then moves around the table, swinging its arms as it walks. You move out of the way as it passes to keep it from bumping into you. After it has returned to its starting position, it stops and turns to you and tilts its head quizzically.
+
+
+-> Command_Robot_1
+
+// -------------------------------------------------
+= Shake_hand 
+
+With its head tilted slightly back, the robot makes eye contact with you and slowly extends its arm and grabs your hand. The handshake is firm and commanding. The robot then retracts its hand and lets its arm fall along the side of its body.
+
+
+
+-> Command_Robot_1
+
+// -------------------------------------------------
+
+= Robot_1_leaves
+
+The robot briefly looks you up and down. It nods slightly as it looks you in the eyes and after a brief pause it turns to the exit. With a graceful gait it walks towards the doorway and exits the room. 
+
+
+->Rate_Robot_1
+
+=== Rate_Robot_1 ===
+
+~ Loop_count = 1
+
+When the robot has left, you bring up your clipboard to fill in your evaluation of robot \#1. The evaluation reads as follows:
+
+On a scale of 1 to 5, where 1 is "Not accurate" and 5 is "Very accurate", how well do the following words describe the robot you just interacted with?
+
+-> Top_of_adjective_loop
+
+- (Top_of_adjective_loop)
+
+//Check if the robot has been rated using all the adjectives. If it hasn't, keep going through the loop. If it has, send to the next scene.
+{ LIST_COUNT(Robot_personality) < Loop_count:
+    -> Next_robot
+- else:
+    -> Rating_part
+}
+
+
+
+
+- (Rating_part)
+
+// Displays current adjective to rate the robot to the user
+{Robot_personality(Loop_count)}
+~ Loop_count +=1
+
+//Presents all numerical choices, records the answer, and sends the user to the top of the loop
++ [1]
+~ RobotRatings+="1"
+-> Top_of_adjective_loop
++ [2]  
+~ RobotRatings+="2"
+-> Top_of_adjective_loop
++ [3]  
+~ RobotRatings+="3"
+-> Top_of_adjective_loop
++ [4]  
+~ RobotRatings+="4"
+-> Top_of_adjective_loop
++ [5]  
+~ RobotRatings+="5"
+-> Top_of_adjective_loop
+
+
+
+//Check if there are any robots left to encounter. If yes, send the next one in. If no, ask to end the session instead.
+- (Next_robot)
+
+
++ {LIST_COUNT(Robot_list) > 0} - Ask to send the next robot in -> Start_scene.Random_robot
++ {LIST_COUNT(Robot_list) == 0} - [Leave the room and end the test] -> End_scene
+
+
+-> END
